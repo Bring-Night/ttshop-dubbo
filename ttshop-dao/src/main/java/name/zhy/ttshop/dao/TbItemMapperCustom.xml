@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="name.zhy.ttshop.dao.TbItemMapperCustom">
+
+	<sql id="Base_Column_List">
+		i.id,
+		i.title,
+		i.sell_point AS sellPoint,
+		i.price,
+		i.num,
+		i.barcode,
+		i.image,
+		i.cid,
+		i.status,
+		i.created,
+		i.updated,
+		c.name AS catName,
+		CASE i.status
+		when 1 THEN '正常'
+		when 2 THEN '下架'
+		when 3 THEN '删除'
+		END AS statusName
+	</sql>
+	<sql id="where_Clause">
+		<where>
+			i.status!=3
+			<if
+				test="tbItemQuery != null and tbItemQuery.title != null and tbItemQuery.title != ''">
+				AND i.title LIKE '%${tbItemQuery.title}%'
+			</if>
+			<if
+				test="tbItemQuery != null and tbItemQuery.status != null and tbItemQuery.status != 0">
+				AND i.status = #{tbItemQuery.status}
+			</if>
+		</where>
+	</sql>
+
+	<!--分页+排序+条件查询 -->
+	<select id="selectByPage" resultType="name.zhy.ttshop.pojo.vo.TbItemCustom">
+		SELECT
+		<include refid="Base_Column_List"></include>
+		from tb_item i
+		LEFT JOIN tb_item_cat c
+		ON i.cid=c.id
+		<include refid="where_Clause"></include>
+		<choose>
+			<when test="order != null and order.sort != null and order.order != null">
+				ORDER BY ${order.sort} ${order.order}
+			</when>
+			<otherwise>
+				ORDER BY i.id DESC
+			</otherwise>
+
+		</choose>
+		LIMIT #{pager.offset},#{pager.rows}
+	</select>
+
+	<!--查找条数 -->
+	<select id="selectCount" resultType="_long">
+		SELECT COUNT(1)
+		from tb_item i
+		<include refid="where_Clause"></include>
+	</select>
+
+	<select id="getSearchItemList" resultType="name.zhy.ttshop.pojo.vo.TbSearchItemCustom">
+		SELECT
+		i.id,
+		i.title,
+		i.sell_point as sellPoint,
+		i.price,
+		i.image,
+		c.name as catName
+		FROM
+		tb_item i
+		LEFT JOIN tb_item_cat c ON i.cid = c.id
+		WHERE
+		i.status = 1
+		order by i.id desc
+	</select>
+</mapper>

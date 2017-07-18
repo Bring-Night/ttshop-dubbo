@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+  <display-name>ttshop-manager-web</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+  
+  
+	<!-- 配置spring监听器 -->
+<!-- 	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:spring/applicationContext-*.xml</param-value>
+	</context-param>
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener> -->
+
+<!--  SpringMVC:前端控制器-->  
+  <servlet>
+  	<servlet-name>springmvc-manager</servlet-name>
+  	<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+  <!-- 加载SpringMVC配置 -->
+	<init-param>
+  		<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:spring/spring-mvc.xml</param-value>
+  	</init-param>
+  	<load-on-startup>1</load-on-startup>
+  </servlet>
+  <!-- 来自客户的所有的请求都经过springmvc -->
+  <servlet-mapping>
+  	<servlet-name>springmvc-manager</servlet-name>
+  	<url-pattern>/</url-pattern>
+  </servlet-mapping>
+<!-- 拦截缓存 -->
+	<!-- <filter>
+		<filter-name>CacheFilter</filter-name>
+		<filter-class>com.opensymphony.oscache.web.filter.CacheFilter</filter-class>
+		<init-param>
+			<param-name>time</param-name>
+			<param-value>3600</param-value>
+		</init-param>
+		<init-param>
+			<param-name>scope</param-name>
+			<param-value>application</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>CacheFilter</filter-name>
+		<url-pattern>/it/*</url-pattern>
+	</filter-mapping> -->
+
+<!-- 解决post中文编码问题 -->
+  <filter>
+  	<filter-name>characterEncodingFilter</filter-name>
+  	<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+  	<init-param>
+  		<param-name>encoding</param-name>
+  		<param-value>utf-8</param-value>
+  	</init-param>
+  </filter>
+  <filter-mapping>
+  	<filter-name>characterEncodingFilter</filter-name>
+  	<url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <!-- spring.web.filter -->
+<!-- 	<filter>
+		<filter-name>requestContextFilter</filter-name>
+		<filter-class>org.springframework.web.filter.RequestContextFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>requestContextFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+ -->
+	<!-- druid监控 -->
+	<servlet>
+		<servlet-name>DruidStatView</servlet-name>
+		<servlet-class>com.alibaba.druid.support.http.StatViewServlet</servlet-class>
+		 <init-param>  
+   		 <!-- 用户名 -->  
+    	 <param-name>loginUsername</param-name>  
+   		 <param-value>zhy</param-value>  
+   	  </init-param>  
+      <init-param>  
+   	    <!-- 密码 -->  
+    	<param-name>loginPassword</param-name>  
+    	<param-value>zhy-123</param-value>  
+      </init-param>  
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DruidStatView</servlet-name>
+		<url-pattern>/druid/*</url-pattern>
+	</servlet-mapping>
+	
+	<!-- druid增加配置，使用Web应用、URI监控、Session监控等功能 -->
+	<!-- 
+	  public final static String PARAM_NAME_PROFILE_ENABLE         = "profileEnable";
+    public final static String PARAM_NAME_SESSION_STAT_ENABLE    = "sessionStatEnable";
+    public final static String PARAM_NAME_SESSION_STAT_MAX_COUNT = "sessionStatMaxCount";
+    public static final String PARAM_NAME_EXCLUSIONS             = "exclusions";
+    public static final String PARAM_NAME_PRINCIPAL_SESSION_NAME = "principalSessionName";
+    public static final String PARAM_NAME_PRINCIPAL_COOKIE_NAME  = "principalCookieName";
+    public static final String PARAM_NAME_REAL_IP_HEADER         = "realIpHeader";
+	 -->
+	<filter>
+		<filter-name>DruidWebStatFilter</filter-name>
+		<filter-class>com.alibaba.druid.support.http.WebStatFilter</filter-class>
+		<init-param>
+			<param-name>exclusions</param-name>
+			<param-value>*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*</param-value>
+		</init-param>
+
+		<init-param>
+			<param-name>sessionStatMaxCount</param-name>
+			<param-value>1000</param-value>
+		</init-param>
+
+		<init-param>
+			<param-name>sessionStatEnable</param-name>
+			<param-value>true</param-value>
+		</init-param>
+
+		<init-param>
+			<param-name>profileEnable</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>DruidWebStatFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+  
+  
+</web-app>

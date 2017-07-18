@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="name.zhy.ttshop.dao.TbContentMapperCustom">
+
+    <sql id="Base_Column_List" >
+    id,
+    category_id,
+    title,
+    sub_title AS subTitle,
+    title_desc AS titleDesc,
+    url,
+    pic,
+    pic2,
+    created,
+    updated,
+    status
+  </sql>
+
+
+    <!--分页+排序+条件查询-->
+    <select id="selectByPage" resultType="name.zhy.ttshop.pojo.po.TbContent">
+        SELECT
+        <include refid="Base_Column_List"></include>
+        from tb_content c
+        WHERE category_id = #{categoryId}
+        AND status != 3
+        LIMIT #{pager.offset},#{pager.rows}
+    </select>
+
+    <!--查找条数-->
+    <select id="selectCount" resultType="_long">
+        SELECT COUNT(1)
+        from tb_content c
+        WHERE category_id = #{categoryId}
+        AND status != 3
+    </select>
+
+</mapper>

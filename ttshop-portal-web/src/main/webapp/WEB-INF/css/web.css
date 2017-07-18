@@ -1,0 +1,38 @@
+@CHARSET "UTF-8";
+.icon-up{
+    background:url('../images/up.png') no-repeat center center;
+}
+.icon-down{
+    background:url('../images/down.png') no-repeat center center;
+}
+
+.myform table{
+    width: 100%;
+}
+.myform table td{
+    border: 1px solid #eee;
+}
+.myform table .label{
+    width: 20%;
+    text-align: right;
+    padding:5px;
+}
+.myform .formBtn{
+    text-align:center;
+}
+
+/*图片上传显示的样式*/
+#upload_img_wrap{
+    list-style-type: none;
+    padding: 0;
+}
+#upload_img_wrap li{
+    display: inline;
+
+}
+#upload_img_wrap li img{
+    max-height: 150px;
+    border: 1px solid lightgray;
+    padding: 5px;
+    margin: 5px;
+}
